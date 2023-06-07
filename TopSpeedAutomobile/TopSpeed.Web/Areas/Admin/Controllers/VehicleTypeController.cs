@@ -27,5 +27,26 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
 
             return View(vehicleType);
         }
+
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(string name)
+        {
+            VehicleType vehicleType = new VehicleType
+            {
+                Name = name
+            };
+
+            _dbContext.VehicleType.Add(vehicleType);
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
