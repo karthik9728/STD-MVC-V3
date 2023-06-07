@@ -1,5 +1,80 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model List<VehicleType>
+
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6 text-uppercase">
+            <h2>Vehicle Type List</h2>
+        </div>
+        <div class="col-md-6 text-end">
+           @* <a asp-area="Admin" asp-controller="VehicleType" asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create</a>*@
+            <a href="#" id="createButton" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Create</a>
+        </div>   
+    </div>
+    <hr />
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th class="text-center">Id</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center" width="40%">@item.Id</td>
+                    <td class="text-center" width="40%">@item.Name</td>
+                    <td class="d-flex align-items-center justify-content-center">
+                        <div class="w-75" role="group">
+                            <a asp-area="Admin" asp-controller="VehicleType" asp-action="Details" asp-route-id="@item.Id" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Details"><i class="bi bi-info-circle"></i> </a>
+                            <a asp-area="Admin" asp-controller="VehicleType" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning" data-toggle="tooltip" data-placement="top" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                            <a asp-area="Admin" asp-controller="VehicleType" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Delete"><i class="bi bi-trash"></i> </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="modal" id="createModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create VehicleType</h5>
+            </div>
+            <div class="modal-body">
+                <form action="@Url.Action("Create", "VehicleType")" method="post">
+                    <div class="form-group">
+                        <label for="nameInput">Name:</label>
+                        <input type="text" class="form-control" id="nameInput" name="name" required>
+                    </div>
+                    <br />
+                    <button type="button" class="btn btn-danger close" data-dismiss="modal" aria-label="Close">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#createButton").click(function () {
+                $("#createModal").modal("show");
+            });
+
+            $(".modal .close").click(function () {
+                $("#createModal").modal("hide");
+            });
+        });
+    </script>
+
 }
