@@ -20,4 +20,8 @@
     <ProjectReference Include="..\TopSpeed.DataAccess\TopSpeed.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\brand\" />
+  </ItemGroup>
+
 </Project>
