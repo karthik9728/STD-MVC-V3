@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TopSpeed.Application.Contracts.Presistence;
 using TopSpeed.DataAccess.Common;
 using TopSpeed.Domain.Models;
 
@@ -7,24 +10,23 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
 {
     public class VehicleTypeController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public VehicleTypeController(ApplicationDbContext dbContext)
+        public VehicleTypeController(IUnitOfWork unitOfWork)
         {
-            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index()
         {
-            List<VehicleType> vehicleTypes = await _dbContext.VehicleType.ToListAsync();
+            List<VehicleType> vehicleTypes = await _unitOfWork.VehicleType.GetAllAsync();
 
             return View(vehicleTypes);
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            VehicleType vehicleType = await _dbContext.VehicleType.FirstOrDefaultAsync(x=>x.Id == id);
-
+            VehicleType vehicleType = await _unitOfWork.VehicleType.GetByIdAsync(id);
             return View(vehicleType);
         }
 
@@ -43,8 +45,8 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
                 Name = name
             };
 
-            _dbContext.VehicleType.Add(vehicleType);
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.VehicleType.Create(vehicleType);
+            await _unitOfWork.SaveAsync();
 
             return RedirectToAction(nameof(Index));
         }
