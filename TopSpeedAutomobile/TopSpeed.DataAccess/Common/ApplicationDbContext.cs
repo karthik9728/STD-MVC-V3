@@ -18,6 +18,8 @@ namespace TopSpeed.DataAccess.Common
 
         public DbSet<VehicleType> VehicleType { get; set; }
 
+        public DbSet<Brand> Brand { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -31,12 +33,12 @@ namespace TopSpeed.DataAccess.Common
 
                 if(entity.State == EntityState.Added)
                 {
-                    entity.Entity.CreatedOn = DateTime.Now;
+                    entity.Entity.CreatedOn = DateTime.UtcNow;
                 }
 
                 if(entity.State == EntityState.Modified)
                 {
-                    entity.Entity.ModifiedOn = DateTime.Now;
+                    entity.Entity.ModifiedOn = DateTime.UtcNow;
                 }
             }
 

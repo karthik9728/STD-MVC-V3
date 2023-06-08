@@ -1,30 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using TopSpeed.Application.Contracts.Presistence;
 using TopSpeed.DataAccess.Common;
 using TopSpeed.Domain.Models;
 
 namespace TopSpeed.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class VehicleTypeController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public VehicleTypeController(ApplicationDbContext dbContext)
+        public VehicleTypeController(IUnitOfWork unitOfWork)
         {
-            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index()
         {
-            List<VehicleType> vehicleTypes = await _dbContext.VehicleType.ToListAsync();
+            List<VehicleType> vehicleTypes = await _unitOfWork.VehicleType.GetAllAsync();
 
             return View(vehicleTypes);
         }
 
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            VehicleType vehicleType = await _dbContext.VehicleType.FirstOrDefaultAsync(x=>x.Id == id);
-
+            VehicleType vehicleType = await _unitOfWork.VehicleType.GetByIdAsync(id);
             return View(vehicleType);
         }
 
@@ -36,16 +39,50 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name)
+        public async Task<IActionResult> Create(VehicleType vehicleType)
         {
-            VehicleType vehicleType = new VehicleType
+            if (ModelState.IsValid)
             {
-                Name = name
-            };
+                await _unitOfWork.VehicleType.Create(vehicleType);
+                await _unitOfWork.SaveAsync();
+                return RedirectToAction(nameof(Index));
+            }
 
-            _dbContext.VehicleType.Add(vehicleType);
-            await _dbContext.SaveChangesAsync();
+            return View();
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var vehicleType = await _unitOfWork.VehicleType.GetByIdAsync(id);
+
+            return View(vehicleType);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(VehicleType vehicleType)
+        {
+            if (ModelState.IsValid)
+            {
+                await _unitOfWork.VehicleType.Update(vehicleType);
+                await _unitOfWork.SaveAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var vehicleType = await _unitOfWork.VehicleType.GetByIdAsync(id);
+
+            return View(vehicleType);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(VehicleType vehicleType)
+        {
+            await _unitOfWork.VehicleType.Delete(vehicleType);
             return RedirectToAction(nameof(Index));
         }
     }
