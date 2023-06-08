@@ -31,12 +31,12 @@ namespace TopSpeed.DataAccess.Common
 
                 if(entity.State == EntityState.Added)
                 {
-                    entity.Entity.CreatedOn = DateTime.Now;
+                    entity.Entity.CreatedOn = DateTime.UtcNow;
                 }
 
                 if(entity.State == EntityState.Modified)
                 {
-                    entity.Entity.ModifiedOn = DateTime.Now;
+                    entity.Entity.ModifiedOn = DateTime.UtcNow;
                 }
             }
 

@@ -38,16 +38,50 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name)
+        public async Task<IActionResult> Create(VehicleType vehicleType)
         {
-            VehicleType vehicleType = new VehicleType
+            if (ModelState.IsValid)
             {
-                Name = name
-            };
+                await _unitOfWork.VehicleType.Create(vehicleType);
+                await _unitOfWork.SaveAsync();
+                return RedirectToAction(nameof(Index));
+            }
 
-            await _unitOfWork.VehicleType.Create(vehicleType);
-            await _unitOfWork.SaveAsync();
+            return View();
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var vehicleType = await _unitOfWork.VehicleType.GetByIdAsync(id);
+
+            return View(vehicleType);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(VehicleType vehicleType)
+        {
+            if (ModelState.IsValid)
+            {
+                await _unitOfWork.VehicleType.Update(vehicleType);
+                await _unitOfWork.SaveAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var vehicleType = await _unitOfWork.VehicleType.GetByIdAsync(id);
+
+            return View(vehicleType);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(VehicleType vehicleType)
+        {
+            await _unitOfWork.VehicleType.Delete(vehicleType);
             return RedirectToAction(nameof(Index));
         }
     }

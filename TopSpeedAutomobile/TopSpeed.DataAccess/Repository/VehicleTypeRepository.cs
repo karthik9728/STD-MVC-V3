@@ -21,7 +21,7 @@ namespace TopSpeed.DataAccess.Repository
         {
             var objFromDb = await _dbContext.VehicleType.FirstOrDefaultAsync(x=>x.Id == vehicleType.Id);
 
-            if(objFromDb == null)
+            if(objFromDb != null)
             {
                 objFromDb.Name = vehicleType.Name;
             }
