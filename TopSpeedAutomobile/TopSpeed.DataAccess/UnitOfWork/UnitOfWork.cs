@@ -17,9 +17,13 @@ namespace TopSpeed.DataAccess.UnitOfWork
         {
             _dbContext = dbContext;
             VehicleType = new VehicleTypeRepository(_dbContext);
+            Brand = new BrandRepository(_dbContext);
         }
 
         public IVehicleTypeRepository VehicleType { get; private set; }
+
+        public IBrandRepository Brand { get; private set; }
+
 
         public async Task SaveAsync()
         {

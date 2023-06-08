@@ -18,6 +18,8 @@ namespace TopSpeed.DataAccess.Common
 
         public DbSet<VehicleType> VehicleType { get; set; }
 
+        public DbSet<Brand> Brand { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
