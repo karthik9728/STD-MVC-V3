@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using TopSpeed.Application.Contracts.Presistence;
-using TopSpeed.Domain.Models;
+using TopSpeed.Domain.Model;
 
 namespace TopSpeed.Web.Areas.Admin.Controllers
 {

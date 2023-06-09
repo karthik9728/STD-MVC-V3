@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TopSpeed.Application.Contracts.Presistence;
 using TopSpeed.DataAccess.Common;
-using TopSpeed.Domain.Models;
+using TopSpeed.Domain.Model;
 
 namespace TopSpeed.Web.Areas.Admin.Controllers
 {

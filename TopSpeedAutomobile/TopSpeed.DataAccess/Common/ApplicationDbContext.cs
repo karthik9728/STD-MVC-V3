@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TopSpeed.Domain.Common;
 using TopSpeed.Domain.ModelAggregate.User;
-using TopSpeed.Domain.Models;
+using TopSpeed.Domain.Model;
 
 namespace TopSpeed.DataAccess.Common
 {
