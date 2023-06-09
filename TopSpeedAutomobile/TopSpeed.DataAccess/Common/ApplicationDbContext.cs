@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TopSpeed.Domain.Common;
 using TopSpeed.Domain.ModelAggregate.User;
 using TopSpeed.Domain.Model;
+using TopSpeed.Domain.ModelAggregate.Post;
 
 namespace TopSpeed.DataAccess.Common
 {
@@ -19,6 +20,8 @@ namespace TopSpeed.DataAccess.Common
         public DbSet<VehicleType> VehicleType { get; set; }
 
         public DbSet<Brand> Brand { get; set; }
+
+        public DbSet<Post> Post { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
