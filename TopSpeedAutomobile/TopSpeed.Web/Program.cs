@@ -9,6 +9,9 @@ using TopSpeed.Application.Contracts.Presistence;
 using TopSpeed.DataAccess.Common;
 using TopSpeed.DataAccess.Repository;
 using TopSpeed.DataAccess.UnitOfWork;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using TopSpeed.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,12 +23,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddIdentity<IdentityUser,IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
 #endregion
 
 #region Repository and Other Services
 
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 #endregion
 
@@ -61,7 +67,13 @@ static async void UpdateDatabaseAsync(IHost host)
 
 #endregion
 
+builder.Services.AddRazorPages();
+
 var app = builder.Build();
+
+var serviceProvider = app.Services;
+
+await SeedData.SeedRole(serviceProvider);
 
 UpdateDatabaseAsync(app);
 
@@ -79,6 +91,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

@@ -24,6 +24,10 @@ namespace TopSpeed.DataAccess.UnitOfWork
 
         public IBrandRepository Brand { get; private set; }
 
+        public void Dispose()
+        {
+            _dbContext.Dispose();
+        }
 
         public async Task SaveAsync()
         {

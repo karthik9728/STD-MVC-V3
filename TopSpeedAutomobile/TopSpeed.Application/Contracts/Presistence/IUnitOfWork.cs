@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TopSpeed.Application.Contracts.Presistence
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         public IVehicleTypeRepository VehicleType { get; }
 
