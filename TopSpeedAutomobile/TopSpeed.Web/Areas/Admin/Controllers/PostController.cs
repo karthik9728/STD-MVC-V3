@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using TopSpeed.Domain.Model;
+using System.Drawing.Drawing2D;
 
 namespace TopSpeed.Web.Areas.Admin.Controllers
 {
@@ -100,7 +101,7 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
                     file[0].CopyTo(fileSteam);
                 }
 
-                postVM.Post.VehicleImage = @"\images\post" + newFileName + extension;
+                postVM.Post.VehicleImage = @"\images\post\" + newFileName + extension;
             }
 
             if (ModelState.IsValid)
@@ -208,5 +209,77 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
         }
 
 
+        [HttpGet]
+
+        public async Task<IActionResult> Delete(int id)
+        {
+
+            var post = await _unitOfWork.Post.GetByIdAsync(id);
+
+            IEnumerable<SelectListItem> brandList = _unitOfWork.Brand.Query().Select(x => new SelectListItem
+            {
+                Text = x.Name.ToUpper(),
+                Value = x.Id.ToString()
+            });
+
+            IEnumerable<SelectListItem> vehicleTypeList = _unitOfWork.VehicleType.Query().Select(x => new SelectListItem
+            {
+                Text = x.Name.ToUpper(),
+                Value = x.Id.ToString()
+            });
+
+            IEnumerable<SelectListItem> engineAndFuelType = Enum.GetValues(typeof(EngineAndFuelType))
+                .Cast<EngineAndFuelType>()
+                .Select(x => new SelectListItem
+                {
+                    Text = x.ToString().ToUpper(),
+                    Value = ((int)x).ToString()
+                });
+
+            IEnumerable<SelectListItem> transmission = Enum.GetValues(typeof(Transmission))
+               .Cast<Transmission>()
+               .Select(x => new SelectListItem
+               {
+                   Text = x.ToString().ToUpper(),
+                   Value = ((int)x).ToString()
+               });
+
+            PostVM postVM = new PostVM
+            {
+                Post = post,
+                BrandList = brandList,
+                VehicleTypeList = vehicleTypeList,
+                EngineAndFuelTypeList = engineAndFuelType,
+                TransmissionList = transmission
+            };
+
+            return View(postVM);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(PostVM postVM)
+        {
+            string webRootPath = _webHostEnvironment.WebRootPath;
+
+            if (!string.IsNullOrEmpty(postVM.Post.VehicleImage))
+            {
+
+                //delete old image
+                var objFromDb = await _unitOfWork.Post.GetByIdAsync(postVM.Post.Id);
+
+                var oldImagePath = Path.Combine(webRootPath, objFromDb.VehicleImage.Trim('\\'));
+
+                if (System.IO.File.Exists(oldImagePath))
+                {
+                    System.IO.File.Delete(oldImagePath);
+                }
+            }
+
+            await _unitOfWork.Post.Delete(postVM.Post);
+            await _unitOfWork.SaveAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
