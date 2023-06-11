@@ -14,12 +14,14 @@ namespace TopSpeed.Domain.ModelAggregate.Post
 {
     public class Post :  BaseModel
     {
+        [Display(Name = "Brand")]
         public int BrandId { get; set; }
 
         [ValidateNever]
         [ForeignKey("BrandId")]
         public Brand Brand { get; set; }
 
+        [Display(Name = "Vehicle Type")]
         public int VehicleTypeId { get; set; }
 
         [ValidateNever]
@@ -28,8 +30,10 @@ namespace TopSpeed.Domain.ModelAggregate.Post
 
         public string Name { get; set; }
 
+        [Display(Name = "Select Engine/Fuel Type")]
         public EngineAndFuelType EngineAndFuelType { get; set; }
 
+        [Display(Name = "Select Transmission Mode")]
         public Transmission Transmission { get; set; }
 
         public int Engine { get; set; }
@@ -40,6 +44,8 @@ namespace TopSpeed.Domain.ModelAggregate.Post
 
         public int Range { get; set; }
 
+
+        [Display(Name = "Seating Capacity")]
         public string SeatingCapacity { get; set; }
 
         [Display(Name="Base Price")]
@@ -52,6 +58,7 @@ namespace TopSpeed.Domain.ModelAggregate.Post
         [Range(1,5,ErrorMessage = "Rating Should be from 1 to 5 only")]
         public int Ratings { get; set; }
 
+        [Display(Name = "Upload Vehicle Image")]
         public string VehicleImage { get; set; }
     }
 }

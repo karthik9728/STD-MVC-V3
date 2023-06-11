@@ -12,6 +12,8 @@ namespace TopSpeed.Application.Contracts.Presistence
 
         public IBrandRepository Brand { get; }
 
+        public IPostRepository Post { get; }
+
         Task SaveAsync();
     }
 }
