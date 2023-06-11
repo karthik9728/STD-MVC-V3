@@ -36,6 +36,13 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
         }
 
 
+        public async Task<IActionResult> Details(int id)
+        {
+            var post = await _unitOfWork.Post.GetPostById(id);
+
+            return View(post);
+        }
+
         [HttpGet]
 
         public IActionResult Create()

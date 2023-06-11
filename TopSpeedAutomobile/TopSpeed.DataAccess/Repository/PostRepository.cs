@@ -51,5 +51,10 @@ namespace TopSpeed.DataAccess.Repository
         {
             return await _dbContext.Post.Include(x => x.Brand).Include(x=>x.VehicleType).ToListAsync();
         }
+
+        public async Task<Post> GetPostById(int id)
+        {
+            return await _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).FirstOrDefaultAsync(x=>x.Id == id);
+        }
     }
 }

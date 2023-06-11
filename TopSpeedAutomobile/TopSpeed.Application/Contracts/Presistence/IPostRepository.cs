@@ -12,5 +12,7 @@ namespace TopSpeed.Application.Contracts.Presistence
         Task Update(Post post);
 
         Task<List<Post>> GetAllPost();
+
+        Task<Post> GetPostById(int id);
     }
 }
