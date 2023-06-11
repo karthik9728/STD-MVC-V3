@@ -49,7 +49,7 @@ namespace TopSpeed.DataAccess.Repository
 
         public async Task<List<Post>> GetAllPost()
         {
-            return await _dbContext.Post.Include(x => x.Brand).Include(x=>x.VehicleType).ToListAsync();
+            return await _dbContext.Post.Include(x => x.Brand).Include(x=>x.VehicleType).OrderByDescending(x=>x.ModifiedOn).ToListAsync();
         }
 
         public async Task<Post> GetPostById(int id)
