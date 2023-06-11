@@ -42,7 +42,7 @@ namespace TopSpeed.DataAccess.Repository
                     objFromDb.VehicleImage = post.VehicleImage;
                 }
                 
-                _dbContext.Update(post);
+                _dbContext.Update(objFromDb);
             }
         }
 

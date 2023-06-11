@@ -14,4 +14,8 @@
     <ProjectReference Include="..\TopSpeed.Domain\TopSpeed.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Interface\" />
+  </ItemGroup>
+
 </Project>
