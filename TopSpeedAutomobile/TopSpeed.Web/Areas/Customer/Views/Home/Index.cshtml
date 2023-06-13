@@ -2,7 +2,7 @@
 
 <div class="container p-4">
     <div class="row">
-        @foreach(var item in Model)
+        @foreach (var item in Model)
         {
             <div class="col-md-4" style="margin-bottom: 20px;">
                 <div class="card border-2 border border-dark shadow mb-2 bg-white rounded">
@@ -16,14 +16,14 @@
                                     @item.Name
                                 </h6>
                                 <p style="color:red" class="text-uppercase" style="font-weight: bold;"><span> @item.PriceFrom.ToString("c")</span></p>
-                                <a class="btn btn-success" href="@Url.Action("Details","Home",new {id = item.Id,page =ViewBag.CurrentPage})">Details</a>
-                              @*  <a class="btn btn-success" asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">Details</a>*@
+                                <a class="btn btn-success" href="@Url.Action("Details","Home",new {id = item.Id,page = ViewBag.CurrentPage})">Details</a>
+                                @*  <a class="btn btn-success" asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">Details</a>*@
                             </div>
                             <div class="col-md-6 text-end">
                                 <img src="@item.Brand.BrandLogo" width="60px" height="60px">
-                             @*   <a class="btn btn-success" asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">Details</a>*@
+                                @*   <a class="btn btn-success" asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">Details</a>*@
                             </div>
-                        </div>      
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
             }
             else
             {
-                <a class="" href="@Url.Action("Index", new { page = i })">@i</a>              
+                <a class="" href="@Url.Action("Index", new { page = i })">@i</a>
             }
         }
     }
@@ -60,8 +60,8 @@
             }
             else
             {
-              @*  <span class="page-link" aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>*@
+                @*  <span class="page-link" aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>*@
             }
         </li>
 
@@ -90,8 +90,8 @@
             }
             else
             {
-               @* <span class="page-link" aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>*@
+                @* <span class="page-link" aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>*@
             }
         </li>
     </ul>

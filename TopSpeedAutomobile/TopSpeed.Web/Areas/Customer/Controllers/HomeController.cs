@@ -37,7 +37,7 @@ namespace TopSpeed.Web.Areas.Customer.Controllers
 
             //Calculate the total number of pages
             int totalItems = posts.Count;
-            int totalPages =  (int)Math.Ceiling((double)totalItems/ pageSize);
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
             //Pass the total number of pages and current page number to the View
 
@@ -52,11 +52,11 @@ namespace TopSpeed.Web.Areas.Customer.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Details(int id,int? page)
+        public async Task<IActionResult> Details(int id, int? page)
         {
             var post = await _unitOfWork.Post.GetPostById(id);
 
-            ViewBag.CurrentPage = page; 
+            ViewBag.CurrentPage = page;
 
             return View(post);
         }
