@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,7 +10,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TopSpeed.Application.Contracts.Presistence;
+using TopSpeed.Application.ExtensionsMethods;
 using TopSpeed.Domain.ModelAggregate.Post;
+using TopSpeed.Domain.ViewModel;
 
 namespace TopSpeed.Web.Areas.Customer.Controllers
 {
@@ -25,9 +28,41 @@ namespace TopSpeed.Web.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(int? page, bool resetFilter = false)
         {
-            List<Post> posts = await _unitOfWork.Post.GetAllPost();
+            IEnumerable<SelectListItem> brandList = _unitOfWork.Brand.Query().Select(x => new SelectListItem
+            {
+                Text = x.Name.ToUpper(),
+                Value = x.Id.ToString()
+            });
+
+            IEnumerable<SelectListItem> vehicleTypeList = _unitOfWork.VehicleType.Query().Select(x => new SelectListItem
+            {
+                Text = x.Name.ToUpper(),
+                Value = x.Id.ToString()
+            });
+
+            //List<Post> posts = await _unitOfWork.Post.GetAllPost();
+            List<Post> posts;
+
+            // Check if the resetFilter flag is true
+            if (resetFilter)
+            {
+                // Clear the TempData values to reset the filter
+                TempData.Remove("FilteredPosts");
+                TempData.Remove("SelectedBrandId");
+                TempData.Remove("SelectedVehicleTypeId");
+            }
+
+            if (TempData.ContainsKey("FilteredPosts"))
+            {
+                posts = TempData.Get<List<Post>>("FilteredPosts");
+                TempData.Keep("FilteredPosts"); // Keep the TempData for the next request
+            }
+            else
+            {
+                posts = await _unitOfWork.Post.GetAllPost();
+            }
 
             //Set the page size (number of items per page)
             int pageSize = 3;
@@ -48,7 +83,28 @@ namespace TopSpeed.Web.Areas.Customer.Controllers
 
             HttpContext.Session.SetString("PreviousUrl", HttpContext.Request.Path);
 
-            return View(pagedPosts);
+            HomePostVM homePostVM = new HomePostVM
+            {
+                Posts = pagedPosts,
+                BrandList =brandList,
+                VehicleTypeList = vehicleTypeList,
+                BrandId = (int?)TempData["SelectedBrandId"],
+                VehicleTypeId = (int?)TempData["SelectedVehicleTypeId"]
+            };
+
+            return View(homePostVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(HomePostVM homePostVM)
+        {
+            var posts  = await _unitOfWork.Post.GetAllPost(homePostVM.BrandId,homePostVM.VehicleTypeId);
+
+            TempData.Put("FilteredPosts", posts);
+            TempData["SelectedBrandId"] = homePostVM.BrandId;
+            TempData["SelectedVehicleTypeId"] = homePostVM.VehicleTypeId;
+
+            return RedirectToAction("Index", new { page = 1, resetFilter = false });
         }
 
         [Authorize]

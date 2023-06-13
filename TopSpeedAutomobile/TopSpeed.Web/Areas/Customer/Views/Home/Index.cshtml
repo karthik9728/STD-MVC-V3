@@ -1,8 +1,67 @@
-﻿@model List<Post>
+﻿@model HomePostVM
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form method="post">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-md-3 ">
+                        <div class="mb-1">
+                            <label class="form-label">Brand</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-1">
+                            <label class="form-label">Vehicle Type</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                          
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                        </div>
+                    </div>
+                </div>
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-md-3 ">
+                        <div class="mb-3">
+                            <select asp-for="@Model.BrandId" asp-items="@Model.BrandList" class="form-select">
+                                <option value="0" selected>-- All --</option>
+                            </select>
+                            <span asp-validation-for="@Model.BrandId"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <select asp-for="@Model.VehicleTypeId" asp-items="@Model.VehicleTypeList" class="form-select">
+                                <option value="0" selected>-- All --</option>
+                            </select>
+                            <span asp-validation-for="@Model.VehicleTypeId"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <button class="btn btn-success form-control" type="submit">Search</button>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <a href="@Url.Action("Index", new { page = 1, resetFilter = true })" class="btn btn-primary  form-control">Reset</a>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="container p-4">
     <div class="row">
-        @foreach (var item in Model)
+        @foreach (var item in Model.Posts)
         {
             <div class="col-md-4" style="margin-bottom: 20px;">
                 <div class="card border-2 border border-dark shadow mb-2 bg-white rounded">

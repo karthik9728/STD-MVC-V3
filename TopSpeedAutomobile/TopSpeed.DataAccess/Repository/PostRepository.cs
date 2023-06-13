@@ -37,11 +37,11 @@ namespace TopSpeed.DataAccess.Repository
                 objFromDb.PriceTo = post.PriceTo;
                 objFromDb.TopSpeed = post.TopSpeed;
 
-                if(post.VehicleImage != null)
+                if (post.VehicleImage != null)
                 {
                     objFromDb.VehicleImage = post.VehicleImage;
                 }
-                
+
                 _dbContext.Update(objFromDb);
             }
         }
@@ -49,12 +49,34 @@ namespace TopSpeed.DataAccess.Repository
 
         public async Task<List<Post>> GetAllPost()
         {
-            return await _dbContext.Post.Include(x => x.Brand).Include(x=>x.VehicleType).OrderByDescending(x=>x.ModifiedOn).ToListAsync();
+            return await _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).OrderByDescending(x => x.ModifiedOn).ToListAsync();
         }
 
         public async Task<Post> GetPostById(int id)
         {
-            return await _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).FirstOrDefaultAsync(x=>x.Id == id);
+            return await _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<List<Post>> GetAllPost(int? brandId, int? vehicleTypeId)
+        {
+            var query = _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).OrderByDescending(x => x.ModifiedOn);
+
+            if(brandId ==0 && vehicleTypeId == 0)
+            {
+                return await query.ToListAsync();   
+            }
+
+            if (brandId > 0)
+            {
+                query = (IOrderedQueryable<Post>)query.Where(x => x.BrandId == brandId);
+            }
+
+            if (vehicleTypeId > 0)
+            {
+                query = (IOrderedQueryable<Post>)query.Where(x => x.VehicleTypeId == vehicleTypeId);
+            }
+
+            return await query.ToListAsync();
         }
     }
 }

@@ -13,6 +13,8 @@ namespace TopSpeed.Application.Contracts.Presistence
 
         Task<List<Post>> GetAllPost();
 
+        Task<List<Post>> GetAllPost(int? brandId,int? vehicleTypeId);
+
         Task<Post> GetPostById(int id);
     }
 }
