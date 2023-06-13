@@ -98,7 +98,7 @@ namespace TopSpeed.Web.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(HomePostVM homePostVM)
         {
-            var posts  = await _unitOfWork.Post.GetAllPost(homePostVM.BrandId,homePostVM.VehicleTypeId);
+            var posts  = await _unitOfWork.Post.GetAllPost(homePostVM.searchBox,homePostVM.BrandId,homePostVM.VehicleTypeId);
 
             TempData.Put("FilteredPosts", posts);
             TempData["SelectedBrandId"] = homePostVM.BrandId;

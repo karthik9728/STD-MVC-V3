@@ -57,11 +57,11 @@ namespace TopSpeed.DataAccess.Repository
             return await _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<Post>> GetAllPost(int? brandId, int? vehicleTypeId)
+        public async Task<List<Post>> GetAllPost(string? searchName, int? brandId, int? vehicleTypeId)
         {
             var query = _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).OrderByDescending(x => x.ModifiedOn);
 
-            if(brandId ==0 && vehicleTypeId == 0)
+            if(searchName == string.Empty && brandId ==0 && vehicleTypeId == 0)
             {
                 return await query.ToListAsync();   
             }
@@ -74,6 +74,11 @@ namespace TopSpeed.DataAccess.Repository
             if (vehicleTypeId > 0)
             {
                 query = (IOrderedQueryable<Post>)query.Where(x => x.VehicleTypeId == vehicleTypeId);
+            }
+
+            if(!string.IsNullOrEmpty(searchName))
+            {                
+                query = (IOrderedQueryable<Post>)query.Where(x => x.Name.ToString().ToLower().Contains(searchName.ToLower()));
             }
 
             return await query.ToListAsync();

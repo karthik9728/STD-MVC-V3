@@ -13,6 +13,8 @@ namespace TopSpeed.Domain.ViewModel
     {
         public List<Post> Posts { get; set; }
 
+        public string? searchBox { get; set; } = string.Empty;  
+
         public int? BrandId { get; set; }
 
         public int? VehicleTypeId { get; set; }
