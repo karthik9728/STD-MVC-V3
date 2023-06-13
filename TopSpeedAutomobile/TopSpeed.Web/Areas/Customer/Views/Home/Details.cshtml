@@ -124,7 +124,7 @@
 
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-danger">Back</a>
+                    <a href="@Url.Action("GoBack","Home",new { page = ViewBag.CurrentPage })" class="btn btn-danger">Back</a>
                 </div>
             </div>
         </div>

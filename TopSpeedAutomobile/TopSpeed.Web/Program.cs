@@ -75,6 +75,16 @@ static async void UpdateDatabaseAsync(IHost host)
 
 #endregion
 
+
+#region Session Configure
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+});
+
+#endregion
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -101,6 +111,8 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapRazorPages();
 
