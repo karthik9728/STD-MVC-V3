@@ -46,15 +46,46 @@ namespace TopSpeed.DataAccess.Repository
             }
         }
 
+        public async Task<Post> GetPostById(int id)
+        {
+            return await _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
 
         public async Task<List<Post>> GetAllPost()
         {
             return await _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).OrderByDescending(x => x.ModifiedOn).ToListAsync();
         }
 
-        public async Task<Post> GetPostById(int id)
+
+        public async Task<List<Post>> GetAllPost(int? skipRecord,int? brandId)
         {
-            return await _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).FirstOrDefaultAsync(x => x.Id == id);
+            var query = _dbContext.Post.Include(x => x.Brand).Include(x => x.VehicleType).OrderByDescending(x => x.ModifiedOn);
+
+            if (brandId == 0)
+            {
+                return await query.ToListAsync();
+            }
+
+            if (brandId > 0)
+            {
+                query = (IOrderedQueryable<Post>)query.Where(x => x.BrandId == brandId);
+            }
+
+
+            var posts = await query.ToListAsync();
+
+            if (skipRecord.HasValue)
+            {
+                var recordToRemove = posts.FirstOrDefault(x => x.Id == skipRecord.Value);
+                if (recordToRemove != null)
+                {
+                    posts.Remove(recordToRemove);
+                }
+            }
+
+
+            return posts;
         }
 
         public async Task<List<Post>> GetAllPost(string? searchName, int? brandId, int? vehicleTypeId)
@@ -78,10 +109,12 @@ namespace TopSpeed.DataAccess.Repository
 
             if(!string.IsNullOrEmpty(searchName))
             {                
-                query = (IOrderedQueryable<Post>)query.Where(x => x.Name.ToString().ToLower().Contains(searchName.ToLower()));
+                query = (IOrderedQueryable<Post>)query.Where(x => x.Name.Contains(searchName));
             }
 
             return await query.ToListAsync();
         }
+
+
     }
 }

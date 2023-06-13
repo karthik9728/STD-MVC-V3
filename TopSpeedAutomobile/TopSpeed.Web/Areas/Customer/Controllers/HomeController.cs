@@ -110,11 +110,24 @@ namespace TopSpeed.Web.Areas.Customer.Controllers
         [Authorize]
         public async Task<IActionResult> Details(int id, int? page)
         {
-            var post = await _unitOfWork.Post.GetPostById(id);
+            Post post = await _unitOfWork.Post.GetPostById(id);
+
+            List<Post> posts = new List<Post>();
+
+            if (post != null)
+            {
+                posts = await _unitOfWork.Post.GetAllPost(post.Id,post.BrandId);
+            }
 
             ViewBag.CurrentPage = page;
 
-            return View(post);
+            CustomerDetailsVM customerDetailsVM = new CustomerDetailsVM
+            {
+                Post = post,
+                Posts = posts
+            };
+
+            return View(customerDetailsVM);
         }
 
         public IActionResult GoBack(int? page)
