@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TopSpeed.Domain.Common;
 
-namespace TopSpeed.Domain.Models
+namespace TopSpeed.Domain.Model
 {
     public class VehicleType : BaseModel
     {

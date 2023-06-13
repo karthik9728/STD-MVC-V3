@@ -41,6 +41,18 @@ namespace TopSpeed.DataAccess.Repository
             return await _dbContext.Set<T>().AsNoTracking().ToListAsync();
         }
 
+        public IEnumerable<T> Query(Expression<Func<T, bool>> predicate)
+        {
+            var entities = _dbContext.Set<T>().Where(predicate).ToList();
+            return entities;
+        }
+
+        public IEnumerable<T> Query()
+        {
+            var entities = _dbContext.Set<T>().AsNoTracking().ToList();
+            return entities;
+        }
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);

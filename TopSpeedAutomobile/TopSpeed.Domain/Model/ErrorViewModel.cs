@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TopSpeed.Domain.Models
+namespace TopSpeed.Domain.Model
 {
     public class ErrorViewModel
     {

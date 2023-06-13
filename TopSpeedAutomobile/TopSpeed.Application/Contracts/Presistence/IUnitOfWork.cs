@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace TopSpeed.Application.Contracts.Presistence
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         public IVehicleTypeRepository VehicleType { get; }
 
         public IBrandRepository Brand { get; }
+
+        public IPostRepository Post { get; }
 
         Task SaveAsync();
     }

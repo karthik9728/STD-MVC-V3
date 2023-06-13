@@ -18,12 +18,19 @@ namespace TopSpeed.DataAccess.UnitOfWork
             _dbContext = dbContext;
             VehicleType = new VehicleTypeRepository(_dbContext);
             Brand = new BrandRepository(_dbContext);
+            Post = new PostRepository(_dbContext);
         }
 
         public IVehicleTypeRepository VehicleType { get; private set; }
 
         public IBrandRepository Brand { get; private set; }
 
+        public IPostRepository Post { get; private set; }
+
+        public void Dispose()
+        {
+            _dbContext.Dispose();
+        }
 
         public async Task SaveAsync()
         {

@@ -1,24 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TopSpeed.Domain.Common;
-using TopSpeed.Domain.Models;
+using TopSpeed.Domain.ModelAggregate.User;
+using TopSpeed.Domain.Model;
+using TopSpeed.Domain.ModelAggregate.Post;
 
 namespace TopSpeed.DataAccess.Common
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            
+
         }
+
+        public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
         public DbSet<VehicleType> VehicleType { get; set; }
 
         public DbSet<Brand> Brand { get; set; }
+
+        public DbSet<Post> Post { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

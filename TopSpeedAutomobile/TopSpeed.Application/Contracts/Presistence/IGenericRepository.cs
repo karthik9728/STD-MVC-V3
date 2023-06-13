@@ -18,6 +18,10 @@ namespace TopSpeed.Application.Contracts.Presistence
 
         Task<List<T>> GetAllAsync();
 
+        IEnumerable<T> Query(Expression<Func<T, bool>> predicate);
+
+        IEnumerable<T> Query();
+
         Task<T> GetByIdAsync(int id);
 
         Task<bool> IsRecordExsits(Expression<Func<T, bool>> predicate);
