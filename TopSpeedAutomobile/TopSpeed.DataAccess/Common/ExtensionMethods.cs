@@ -29,8 +29,6 @@ namespace TopSpeed.DataAccess.Common
 
         public static async void SaveCommonFields(this ApplicationDbContext dbContext,UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor)
         {
-            //var userId = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)
-            //?? (await userManager.GetUserAsync(httpContextAccessor.HttpContext.User))?.Id;
 
             var userId = await GetCurrentUserId(userManager, httpContextAccessor);
 
