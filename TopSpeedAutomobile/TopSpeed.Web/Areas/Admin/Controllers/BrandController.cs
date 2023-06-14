@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using TopSpeed.Application.Contracts.Presistence;
+using TopSpeed.Application.Services.Interface;
 using TopSpeed.Domain.Model;
 
 namespace TopSpeed.Web.Areas.Admin.Controllers
@@ -14,11 +15,13 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IUserNameService _userName;
 
-        public BrandController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        public BrandController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IUserNameService userName)
         {
             _unitOfWork = unitOfWork;
             _webHostEnvironment = webHostEnvironment;
+            _userName = userName;
         }
 
         [HttpGet]
@@ -33,6 +36,10 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Details(int id)
         {
             Brand brand = await _unitOfWork.Brand.GetByIdAsync(id);
+
+            brand.CreatedBy = await _userName.GetUserName(brand.CreatedBy);
+
+            brand.ModifiedBy = await _userName.GetUserName(brand.ModifiedBy);
 
             return View(brand);
         }

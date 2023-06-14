@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TopSpeed.Application.Contracts.Presistence;
+using TopSpeed.Application.ExtensionsMethods;
+using TopSpeed.Application.Services.Interface;
 using TopSpeed.DataAccess.Common;
 using TopSpeed.Domain.Model;
 
@@ -12,10 +15,12 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
     public class VehicleTypeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserNameService _userName;
 
-        public VehicleTypeController(IUnitOfWork unitOfWork)
+        public VehicleTypeController(IUnitOfWork unitOfWork, IUserNameService userName)
         {
             _unitOfWork = unitOfWork;
+            _userName = userName;
         }
 
         public async Task<IActionResult> Index()
@@ -28,6 +33,11 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Details(int id)
         {
             VehicleType vehicleType = await _unitOfWork.VehicleType.GetByIdAsync(id);
+
+            vehicleType.CreatedBy = await _userName.GetUserName(vehicleType.CreatedBy);
+
+            vehicleType.ModifiedBy = await _userName.GetUserName(vehicleType.ModifiedBy);
+
             return View(vehicleType);
         }
 
