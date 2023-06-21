@@ -1,5 +1,4 @@
 ﻿@model VehicleType
-
 <div class="card">
     <div class="card-header text-center text-uppercase">
         Vehicle Type Details
@@ -34,7 +33,7 @@
                 <p class="card-text text-uppercase"><strong>Created By</strong></p>
             </div>
             <div class="col-sm-8">
-                <p class="card-text">: @((Model.CreatedBy == Guid.Empty) ? "NA" : Model.CreatedBy)</p>
+                <p class="card-text">: @((Model.CreatedBy == String.Empty) ? "NA" : Model.CreatedBy)</p>
             </div>
         </div>
         <div class="row">
@@ -50,7 +49,7 @@
                 <p class="card-text text-uppercase"><strong>Modified By</strong></p>
             </div>
             <div class="col-sm-8">
-                <p class="card-text">: @((Model.ModifiedBy == Guid.Empty) ? "NA" : Model.ModifiedBy)</p>
+                <p class="card-text">: @((Model.ModifiedBy == String.Empty) ? "NA" : Model.ModifiedBy)</p>
             </div>
         </div>
         <div class="row">

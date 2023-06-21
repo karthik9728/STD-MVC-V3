@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using TopSpeed.Domain.Model;
 using System.Drawing.Drawing2D;
+using TopSpeed.Application.Services.Interface;
 
 namespace TopSpeed.Web.Areas.Admin.Controllers
 {
@@ -21,11 +22,13 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IUserNameService _userName;
 
-        public PostController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        public PostController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, IUserNameService userName)
         {
             _unitOfWork = unitOfWork;
             _webHostEnvironment = webHostEnvironment;
+            _userName = userName;
         }
 
         public async Task<IActionResult> Index()
@@ -39,6 +42,10 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var post = await _unitOfWork.Post.GetPostById(id);
+
+            post.CreatedBy = await _userName.GetUserName(post.CreatedBy);
+
+            post.ModifiedBy = await _userName.GetUserName(post.ModifiedBy);
 
             return View(post);
         }
@@ -128,7 +135,7 @@ namespace TopSpeed.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(int id)
         {
 
-            var post = await _unitOfWork.Post.GetByIdAsync(id);    
+            var post = await _unitOfWork.Post.GetByIdAsync(id);
 
             IEnumerable<SelectListItem> brandList = _unitOfWork.Brand.Query().Select(x => new SelectListItem
             {

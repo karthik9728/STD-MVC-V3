@@ -5,6 +5,7 @@ using TopSpeed.Domain.Common;
 using TopSpeed.Domain.ModelAggregate.User;
 using TopSpeed.Domain.Model;
 using TopSpeed.Domain.ModelAggregate.Post;
+using Microsoft.AspNetCore.Http;
 
 namespace TopSpeed.DataAccess.Common
 {
@@ -28,24 +29,26 @@ namespace TopSpeed.DataAccess.Common
             base.OnModelCreating(modelBuilder);
         }
 
-        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
-        {
-            foreach (var entity in base.ChangeTracker.Entries<BaseModel>()
-                .Where(x=>x.State == EntityState.Added || x.State == EntityState.Modified))
-            {
+        //public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        //{
+            
 
-                if(entity.State == EntityState.Added)
-                {
-                    entity.Entity.CreatedOn = DateTime.UtcNow;
-                }
+        //    foreach (var entity in base.ChangeTracker.Entries<BaseModel>()
+        //        .Where(x=>x.State == EntityState.Added || x.State == EntityState.Modified))
+        //    {
 
-                if(entity.State == EntityState.Modified)
-                {
-                    entity.Entity.ModifiedOn = DateTime.UtcNow;
-                }
-            }
+        //        if(entity.State == EntityState.Added)
+        //        {
+        //            entity.Entity.CreatedOn = DateTime.UtcNow;
+        //        }
 
-            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        }
+        //        if(entity.State == EntityState.Modified)
+        //        {
+        //            entity.Entity.ModifiedOn = DateTime.UtcNow;
+        //        }
+        //    }
+
+        //    return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        //}
     }
 }

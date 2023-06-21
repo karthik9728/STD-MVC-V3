@@ -12,6 +12,7 @@ using TopSpeed.DataAccess.UnitOfWork;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using TopSpeed.Application.Services;
+using TopSpeed.Application.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,9 +39,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 #region Repository and Other Services
 
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IUserNameService,UserNameService>();
 
+
+builder.Services.AddHttpContextAccessor();
 #endregion
 
 #region Configuration for Seeding Data to Database
